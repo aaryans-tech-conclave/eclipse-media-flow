@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Search, Bell, User, Menu } from 'lucide-react';
 import MoodDetector from './MoodDetector';
+import TrendingDashboard from './TrendingDashboard';
 
 const StreamingHeader = () => {
   const [activeTab, setActiveTab] = useState('home');
@@ -55,6 +56,9 @@ const StreamingHeader = () => {
               className="bg-transparent border-none outline-none text-white placeholder-gray-400 text-sm w-48"
             />
           </div>
+          
+          {/* Trending Dashboard */}
+          <TrendingDashboard />
           
           {/* Mood Detector */}
           <MoodDetector />
