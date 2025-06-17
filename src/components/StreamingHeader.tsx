@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Search, Bell, User, Menu } from 'lucide-react';
+import MoodDetector from './MoodDetector';
 
 const StreamingHeader = () => {
   const [activeTab, setActiveTab] = useState('home');
@@ -54,6 +55,9 @@ const StreamingHeader = () => {
               className="bg-transparent border-none outline-none text-white placeholder-gray-400 text-sm w-48"
             />
           </div>
+          
+          {/* Mood Detector */}
+          <MoodDetector />
           
           {/* Notifications */}
           <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
