@@ -8,12 +8,58 @@ const MoodDetector = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const silenceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const moods = ['Happy', 'Excited', 'Calm', 'Melancholic', 'Energetic', 'Romantic', 'Adventurous', 'Nostalgic'];
+
+  const detectSilence = () => {
+    if (!analyserRef.current) return;
+
+    const bufferLength = analyserRef.current.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    analyserRef.current.getByteFrequencyData(dataArray);
+
+    // Calculate the average volume level
+    const average = dataArray.reduce((sum, value) => sum + value, 0) / bufferLength;
+    
+    // If volume is below threshold (silence detected)
+    if (average < 10) {
+      if (!silenceTimeoutRef.current) {
+        // Start silence timer - stop after 2 seconds of silence
+        silenceTimeoutRef.current = setTimeout(() => {
+          if (mediaRecorderRef.current && isListening) {
+            console.log('Silence detected, stopping recording');
+            mediaRecorderRef.current.stop();
+            setIsListening(false);
+          }
+        }, 2000);
+      }
+    } else {
+      // Audio detected, clear silence timer
+      if (silenceTimeoutRef.current) {
+        clearTimeout(silenceTimeoutRef.current);
+        silenceTimeoutRef.current = null;
+      }
+    }
+
+    // Continue monitoring if still listening
+    if (isListening) {
+      requestAnimationFrame(detectSilence);
+    }
+  };
 
   const startMoodDetection = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      // Set up audio context for volume analysis
+      audioContextRef.current = new AudioContext();
+      analyserRef.current = audioContextRef.current.createAnalyser();
+      const source = audioContextRef.current.createMediaStreamSource(stream);
+      source.connect(analyserRef.current);
+      analyserRef.current.fftSize = 256;
       
       mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunksRef.current = [];
@@ -33,18 +79,28 @@ const MoodDetector = () => {
         
         // Clean up
         stream.getTracks().forEach(track => track.stop());
+        if (audioContextRef.current) {
+          audioContextRef.current.close();
+        }
+        if (silenceTimeoutRef.current) {
+          clearTimeout(silenceTimeoutRef.current);
+          silenceTimeoutRef.current = null;
+        }
       };
 
       mediaRecorderRef.current.start();
       setIsListening(true);
 
-      // Auto-stop after 3 seconds
+      // Start silence detection
+      detectSilence();
+
+      // Fallback: Auto-stop after 10 seconds maximum
       setTimeout(() => {
         if (mediaRecorderRef.current && isListening) {
           mediaRecorderRef.current.stop();
           setIsListening(false);
         }
-      }, 3000);
+      }, 10000);
 
     } catch (error) {
       console.error('Error accessing microphone:', error);
@@ -56,6 +112,10 @@ const MoodDetector = () => {
     if (mediaRecorderRef.current && isListening) {
       mediaRecorderRef.current.stop();
       setIsListening(false);
+    }
+    if (silenceTimeoutRef.current) {
+      clearTimeout(silenceTimeoutRef.current);
+      silenceTimeoutRef.current = null;
     }
   };
 
