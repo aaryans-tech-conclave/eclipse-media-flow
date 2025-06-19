@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 
-// TODO: Add type for movie
 interface Movie {
   id: number;
   title: string;
