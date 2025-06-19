@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "env": {
+    "TMDB_API_READ_ACCESS_TOKEN": "@tmdb_api_read_access_token",
+    "TMDB_API_KEY": "@tmdb_api_key"
+  }
+} 

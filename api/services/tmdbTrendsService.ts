@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { TrendingItem } from '../types/trends.types';
 import cache from '../utils/cache';
-import dotenv from 'dotenv';
-dotenv.config();
 
 interface TMDBMovieResult {
   id: number;
@@ -72,6 +70,36 @@ export class TMDBTrendsService {
     return this.API_KEY ? `?api_key=${this.API_KEY}` : '';
   }
 
+  private convertMovieToTrendingItem(movie: TMDBMovieResult, index: number): TrendingItem {
+    return {
+      id: `movie_${movie.id}`,
+      title: movie.title,
+      type: 'movie',
+      trendingScore: movie.popularity,
+      timeframe: 'day',
+      category: 'entertainment',
+      timestamp: new Date(),
+      region: 'US',
+      searchVolume: movie.vote_count,
+      relatedQueries: []
+    };
+  }
+
+  private convertTVShowToTrendingItem(show: TMDBTVResult, index: number): TrendingItem {
+    return {
+      id: `tv_${show.id}`,
+      title: show.name,
+      type: 'show',
+      trendingScore: show.popularity,
+      timeframe: 'day',
+      category: 'entertainment',
+      timestamp: new Date(),
+      region: 'US',
+      searchVolume: show.vote_count,
+      relatedQueries: []
+    };
+  }
+
   async getTrendingMovies(timeWindow: 'day' | 'week' = 'day'): Promise<TrendingItem[]> {
     const cacheKey = `tmdb_trending_movies_${timeWindow}`;
     const cached = cache.get<TrendingItem[]>(cacheKey);
@@ -93,9 +121,7 @@ export class TMDBTrendsService {
         this.convertMovieToTrendingItem(movie as TMDBMovieResult, index)
       );
       
-      // Cache for 1 hour for daily, 12 hours for weekly
-      const cacheTime = timeWindow === 'day' ? 3600 : 43200;
-      cache.set(cacheKey, trendingItems, cacheTime);
+      cache.set(cacheKey, trendingItems, timeWindow === 'day' ? 3600 : 43200);
       
       console.log(`Found ${trendingItems.length} trending movies`);
       return trendingItems;
@@ -126,9 +152,7 @@ export class TMDBTrendsService {
         this.convertTVShowToTrendingItem(show as TMDBTVResult, index)
       );
       
-      // Cache for 1 hour for daily, 12 hours for weekly
-      const cacheTime = timeWindow === 'day' ? 3600 : 43200;
-      cache.set(cacheKey, trendingItems, cacheTime);
+      cache.set(cacheKey, trendingItems, timeWindow === 'day' ? 3600 : 43200);
       
       console.log(`Found ${trendingItems.length} trending TV shows`);
       return trendingItems;
@@ -163,9 +187,7 @@ export class TMDBTrendsService {
         }
       });
       
-      // Cache for 1 hour for daily, 12 hours for weekly
-      const cacheTime = timeWindow === 'day' ? 3600 : 43200;
-      cache.set(cacheKey, trendingItems, cacheTime);
+      cache.set(cacheKey, trendingItems, timeWindow === 'day' ? 3600 : 43200);
       
       console.log(`Found ${trendingItems.length} trending items`);
       return trendingItems;
@@ -186,7 +208,6 @@ export class TMDBTrendsService {
     try {
       console.log(`Fetching entertainment trends for region ${region}`);
       
-      // Get both movies and TV shows trending data
       const [moviesResult, tvResult] = await Promise.allSettled([
         this.getTrendingMovies('day'),
         this.getTrendingTVShows('day')
@@ -202,82 +223,26 @@ export class TMDBTrendsService {
         allTrends.push(...tvResult.value);
       }
 
-      // Separate movies and TV shows, get top 15 of each
-      const movies = allTrends
-        .filter(item => item.type === 'movie')
-        .sort((a, b) => b.trendingScore - a.trendingScore)
-        .slice(0, 15);
+      // Sort by trending score
+      allTrends.sort((a, b) => b.trendingScore - a.trendingScore);
       
-      const tvShows = allTrends
-        .filter(item => item.type === 'show')
-        .sort((a, b) => b.trendingScore - a.trendingScore)
-        .slice(0, 15);
+      cache.set(cacheKey, allTrends, 3600);
       
-      const sortedTrends = [...movies, ...tvShows];
-      
-      cache.set(cacheKey, sortedTrends, 1800); // Cache for 30 minutes
-      
-      console.log(`Found ${sortedTrends.length} entertainment trends`);
-      return sortedTrends;
+      return allTrends;
     } catch (error) {
       console.error('Error fetching entertainment trends:', error);
       throw new Error('Failed to fetch entertainment trends');
     }
   }
 
-  private convertMovieToTrendingItem(movie: TMDBMovieResult, index: number): TrendingItem {
-    return {
-      id: `tmdb_movie_${movie.id}`,
-      title: movie.title,
-      type: 'movie',
-      trendingScore: Math.min(Math.round(movie.popularity), 100), // Cap at 100
-      searchVolume: movie.vote_count,
-      timeframe: 'Today',
-      category: 'Movies',
-      relatedQueries: [],
-      timestamp: new Date(),
-      region: 'Global', // TMDB is global
-      overview: movie.overview,
-      releaseDate: movie.release_date,
-      voteAverage: movie.vote_average,
-      posterPath: movie.poster_path,
-      backdropPath: movie.backdrop_path,
-      genreIds: movie.genre_ids,
-    };
-  }
-
-  private convertTVShowToTrendingItem(show: TMDBTVResult, index: number): TrendingItem {
-    return {
-      id: `tmdb_tv_${show.id}`,
-      title: show.name,
-      type: 'show',
-      trendingScore: Math.min(Math.round(show.popularity), 100), // Cap at 100
-      searchVolume: show.vote_count,
-      timeframe: 'Today',
-      category: 'TV Shows',
-      relatedQueries: [],
-      timestamp: new Date(),
-      region: 'Global', // TMDB is global
-      overview: show.overview,
-      releaseDate: show.first_air_date,
-      voteAverage: show.vote_average,
-      posterPath: show.poster_path,
-      backdropPath: show.backdrop_path,
-      genreIds: show.genre_ids,
-    };
-  }
-
   async checkHealth(): Promise<{ status: string }> {
     try {
-      const url = `${this.API_BASE_URL}/configuration${this.getApiKey()}`;
-      await axios.get(url, {
-        headers: this.getHeaders(),
-        timeout: 5000,
-      });
+      const url = `${this.API_BASE_URL}/trending/movie/day${this.getApiKey()}`;
+      await axios.get(url, { headers: this.getHeaders() });
       return { status: 'ok' };
     } catch (error) {
-      console.error('TMDB health check failed:', error);
+      console.error('TMDB API health check failed:', error);
       return { status: 'error' };
     }
   }
-}
+} 

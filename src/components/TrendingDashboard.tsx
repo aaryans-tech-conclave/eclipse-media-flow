@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, X, Clock, BarChart3, Activity, Wifi, WifiOff } from 'lucide-react';
+import { TrendsAPI } from '../services/trendsApi';
 
 interface TrendingItem {
   id: string;
@@ -27,55 +28,6 @@ interface TrendsResponse {
   region: string;
   timestamp: Date;
   totalCount: number;
-}
-
-// API Service
-class TrendsAPI {
-  private static readonly API_BASE_URL = process.env.NODE_ENV === 'production' 
-    ? '/api' // Adjust for your production URL
-    : 'http://localhost:5000/api';
-
-  static async getEntertainmentTrends(geo: string = 'US'): Promise<TrendsResponse> {
-    try {
-      const response = await fetch(`${this.API_BASE_URL}/trends/entertainment?geo=${geo}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data: TrendsResponse = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching entertainment trends:', error);
-      throw error;
-    }
-  }
-
-  static async getDailyTrends(geo: string = 'US'): Promise<{ trends: TrendingItem[] }> {
-    const response = await fetch(`${this.API_BASE_URL}/trends/daily?geo=${geo}`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return response.json();
-  }
-
-  static async getRealTimeTrends(geo: string = 'US'): Promise<{ trends: TrendingItem[] }> {
-    const response = await fetch(`${this.API_BASE_URL}/trends/realtime?geo=${geo}&category=e`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return response.json();
-  }
-
-  static async checkHealth(): Promise<{ status: string }> {
-    try {
-      const response = await fetch(`${this.API_BASE_URL}/trends/health`);
-      return response.json();
-    } catch {
-      return { status: 'error' };
-    }
-  }
 }
 
 const TrendingDashboard = () => {

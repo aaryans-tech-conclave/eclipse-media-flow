@@ -1,3 +1,5 @@
+import { TMDBService } from './tmdbService';
+
 export interface TrendingItem {
   id: string;
   title: string;
@@ -9,6 +11,12 @@ export interface TrendingItem {
   relatedQueries?: string[];
   timestamp: Date;
   region: string;
+  overview?: string;
+  releaseDate?: string;
+  voteAverage?: number;
+  posterPath?: string | null;
+  backdropPath?: string | null;
+  genreIds?: number[];
 }
 
 export interface TrendsResponse {
@@ -29,34 +37,17 @@ export interface InterestOverTimeData {
 }
 
 export class TrendsAPI {
-  private static readonly API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
   static async getEntertainmentTrends(geo: string = 'US'): Promise<TrendsResponse> {
     try {
-      console.log(`Fetching entertainment trends for ${geo} from ${this.API_BASE_URL}`);
+      const trends = await TMDBService.getEntertainmentTrends();
       
-      const response = await fetch(`${this.API_BASE_URL}/trends/entertainment?geo=${geo}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-      }
-      
-      const data: TrendsResponse = await response.json();
-      
-      // Convert timestamp strings back to Date objects
-      data.timestamp = new Date(data.timestamp);
-      data.trends = data.trends.map(trend => ({
-        ...trend,
-        timestamp: new Date(trend.timestamp)
-      }));
-      
-      console.log(`Successfully fetched ${data.trends.length} trending items`);
-      return data;
+      return {
+        trends,
+        cached: false,
+        region: geo,
+        timestamp: new Date(),
+        totalCount: trends.length
+      };
     } catch (error) {
       console.error('Error fetching entertainment trends:', error);
       throw error;
@@ -64,29 +55,13 @@ export class TrendsAPI {
   }
 
   static async getDailyTrends(geo: string = 'US'): Promise<{ trends: TrendingItem[] }> {
-    try {
-      const response = await fetch(`${this.API_BASE_URL}/trends/daily?geo=${geo}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    } catch (error) {
-      console.error('Error fetching daily trends:', error);
-      throw error;
-    }
+    const trends = await TMDBService.getTrendingMovies('day');
+    return { trends };
   }
 
   static async getRealTimeTrends(geo: string = 'US'): Promise<{ trends: TrendingItem[] }> {
-    try {
-      const response = await fetch(`${this.API_BASE_URL}/trends/realtime?geo=${geo}&category=e`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    } catch (error) {
-      console.error('Error fetching real-time trends:', error);
-      throw error;
-    }
+    const trends = await TMDBService.getTrendingMovies('day');
+    return { trends };
   }
 
   static async getInterestOverTime(keyword: string, geo: string = 'US'): Promise<InterestOverTimeData> {
@@ -122,20 +97,11 @@ export class TrendsAPI {
     }
   }
 
-  static async checkHealth(): Promise<{ status: string; timestamp: Date; trendsCount?: number }> {
-    try {
-      const response = await fetch(`${this.API_BASE_URL}/trends/health`);
-      const data = await response.json();
-      return {
-        ...data,
-        timestamp: new Date(data.timestamp)
-      };
-    } catch (error) {
-      console.error('Health check failed:', error);
-      return { 
-        status: 'error', 
-        timestamp: new Date() 
-      };
-    }
+  static async checkHealth(): Promise<{ status: string; timestamp: Date }> {
+    const health = await TMDBService.checkHealth();
+    return {
+      ...health,
+      timestamp: new Date()
+    };
   }
 } 
