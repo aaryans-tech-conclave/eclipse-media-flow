@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Play, Heart } from 'lucide-react';
+import { useLikedItems, LikedItem } from '../contexts/LikedItemsContext';
 
 interface Movie {
   id: number;
@@ -19,6 +20,7 @@ interface GroupPartySelectionProps {
 
 const GroupPartySelection: React.FC<GroupPartySelectionProps> = ({ isOpen, onClose, onMovieSelect }) => {
   const [hoveredMovie, setHoveredMovie] = useState<number | null>(null);
+  const { addToLikedItems, removeFromLikedItems, isLiked } = useLikedItems();
 
   const allMovies = [
     {
@@ -172,17 +174,24 @@ const GroupPartySelection: React.FC<GroupPartySelectionProps> = ({ isOpen, onClo
     onClose();
   };
 
-  return (
-    <>
-      {/* Backdrop */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
-          onClick={onClose}
-        />
-      )}
+  const handleHeartClick = (movie: Movie) => {
+    const likedItem: LikedItem = {
+      ...movie,
+      duration: movie.duration || "2h 0min",
+      type: 'movie'
+    };
 
-      {/* Group Party Selection Window */}
+    if (isLiked(movie.id)) {
+      removeFromLikedItems(movie.id);
+    } else {
+      addToLikedItems(likedItem);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className={`fixed inset-4 bg-black border border-white/20 rounded-2xl transform transition-all duration-300 ease-in-out z-50 ${
         isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'
       }`}>
@@ -202,18 +211,18 @@ const GroupPartySelection: React.FC<GroupPartySelectionProps> = ({ isOpen, onClo
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-6 overflow-y-auto max-h-[calc(100vh-200px)]">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="p-6 overflow-y-auto max-h-[calc(100vh-200px)]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {allMovies.map((movie) => (
               <div
                 key={movie.id}
-                className="cursor-pointer group"
+                className="relative group cursor-pointer"
                 onMouseEnter={() => setHoveredMovie(movie.id)}
                 onMouseLeave={() => setHoveredMovie(null)}
                 onClick={() => handleMovieSelect(movie)}
               >
                 {/* Movie Card */}
-                <div className="relative rounded-lg overflow-hidden bg-gray-800 transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-pink-500/20">
+                <div className="relative rounded-lg overflow-hidden bg-gray-800 transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-purple-500/20">
                   {/* Movie Image */}
                   <div className="aspect-[16/9] relative">
                     <img
@@ -228,8 +237,20 @@ const GroupPartySelection: React.FC<GroupPartySelectionProps> = ({ isOpen, onClo
                     }`}>
                       {/* Quick Actions */}
                       <div className="absolute top-3 right-3">
-                        <button className="p-2 bg-black/50 hover:bg-black/70 rounded-full transition-colors">
-                          <Heart className="w-4 h-4 text-white" />
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleHeartClick(movie);
+                          }}
+                          className={`p-2 rounded-full transition-colors ${
+                            isLiked(movie.id) 
+                              ? 'bg-pink-500/80 hover:bg-pink-500' 
+                              : 'bg-black/50 hover:bg-black/70'
+                          }`}
+                        >
+                          <Heart className={`w-4 h-4 ${
+                            isLiked(movie.id) ? 'text-white fill-white' : 'text-white'
+                          }`} />
                         </button>
                       </div>
 
@@ -254,16 +275,16 @@ const GroupPartySelection: React.FC<GroupPartySelectionProps> = ({ isOpen, onClo
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Movie Title */}
-                  <div className="p-3">
-                    <h3 className="text-white font-semibold text-sm mb-1 line-clamp-2">
-                      {movie.title}
-                    </h3>
-                    <div className="flex items-center justify-between text-xs text-gray-400">
-                      <span>{movie.year}</span>
-                      {movie.duration && <span>{movie.duration}</span>}
-                    </div>
+                {/* Movie Title */}
+                <div className="p-3">
+                  <h3 className="text-white font-semibold text-lg mb-1 line-clamp-2">
+                    {movie.title}
+                  </h3>
+                  <div className="flex items-center justify-between text-sm text-gray-400">
+                    <span>{movie.year}</span>
+                    {movie.duration && <span>{movie.duration}</span>}
                   </div>
                 </div>
               </div>
@@ -271,7 +292,7 @@ const GroupPartySelection: React.FC<GroupPartySelectionProps> = ({ isOpen, onClo
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

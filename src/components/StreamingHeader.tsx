@@ -3,25 +3,46 @@ import { Search, Bell, User, Menu } from 'lucide-react';
 import MoodDetector from './MoodDetector';
 import TrendingDashboard from './TrendingDashboard';
 import GroupPartySlider from './GroupPartySlider';
+import MyListDropdown from './MyListDropdown';
+import UserProfileDropdown from './UserProfileDropdown';
+import SearchDropdown from './SearchDropdown';
 
-const StreamingHeader = () => {
-  const [activeTab, setActiveTab] = useState('home');
+interface StreamingHeaderProps {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+}
+
+const StreamingHeader: React.FC<StreamingHeaderProps> = ({ activeTab, onTabChange }) => {
   const [isGroupPartyOpen, setIsGroupPartyOpen] = useState(false);
+  const [isMyListOpen, setIsMyListOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'movies', label: 'Movies' },
     { id: 'series', label: 'TV Shows' },
-    { id: 'groupparty', label: 'Group Party' },
-    { id: 'mylist', label: 'My List' }
+    { id: 'groupparty', label: 'Group Party' }
   ];
 
   const handleNavClick = (itemId: string) => {
     if (itemId === 'groupparty') {
       setIsGroupPartyOpen(true);
     } else {
-      setActiveTab(itemId);
+      onTabChange(itemId);
     }
+  };
+
+  const handleMyListClick = () => {
+    setIsMyListOpen(true);
+  };
+
+  const handleProfileClick = () => {
+    setIsProfileOpen(true);
+  };
+
+  const handleSearchClick = () => {
+    setIsSearchOpen(true);
   };
 
   return (
@@ -52,20 +73,32 @@ const StreamingHeader = () => {
               )}
             </button>
           ))}
+          
+          {/* My List Button */}
+          <button
+            onClick={handleMyListClick}
+            className={`relative px-3 py-2 text-sm font-medium transition-all duration-300 ${
+              isMyListOpen ? 'text-white' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            My List
+            {isMyListOpen && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full" />
+            )}
+          </button>
+
+          {/* Search Button */}
+          <button
+            onClick={handleSearchClick}
+            className="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-3 py-2 border border-white/20 hover:bg-white/20 transition-colors"
+          >
+            <Search className="w-4 h-4 text-gray-400 mr-2" />
+            <span className="text-white text-sm">Search in Movies, TV Shows...</span>
+          </button>
         </nav>
 
         {/* Right side actions */}
         <div className="flex items-center space-x-2">
-          {/* Search */}
-          <div className="hidden md:flex items-center bg-white/10 backdrop-blur-sm rounded-full px-3 py-2 border border-white/20">
-            <Search className="w-4 h-4 text-gray-400 mr-2" />
-            <input
-              type="text"
-              placeholder="Search movies, shows..."
-              className="bg-transparent border-none outline-none text-white placeholder-gray-400 text-sm w-32"
-            />
-          </div>
-          
           {/* Trending Dashboard */}
           <TrendingDashboard />
           
@@ -78,7 +111,10 @@ const StreamingHeader = () => {
           </button>
           
           {/* Profile */}
-          <button className="p-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600">
+          <button 
+            onClick={handleProfileClick}
+            className="p-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 transition-all duration-300"
+          >
             <User className="w-5 h-5 text-white" />
           </button>
 
@@ -93,6 +129,24 @@ const StreamingHeader = () => {
       <GroupPartySlider 
         isOpen={isGroupPartyOpen} 
         onClose={() => setIsGroupPartyOpen(false)} 
+      />
+
+      {/* My List Dropdown */}
+      <MyListDropdown 
+        isOpen={isMyListOpen} 
+        onClose={() => setIsMyListOpen(false)} 
+      />
+
+      {/* User Profile Dropdown */}
+      <UserProfileDropdown 
+        isOpen={isProfileOpen} 
+        onClose={() => setIsProfileOpen(false)} 
+      />
+
+      {/* Search Dropdown */}
+      <SearchDropdown 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)} 
       />
     </header>
   );

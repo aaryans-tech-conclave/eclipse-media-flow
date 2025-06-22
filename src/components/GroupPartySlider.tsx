@@ -98,7 +98,7 @@ const GroupPartySlider: React.FC<GroupPartySliderProps> = ({ isOpen, onClose }) 
       )}
 
       {/* Slider */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-black backdrop-blur-xl border-l border-white/20 transform transition-transform duration-300 ease-in-out z-50 ${
+      <div className={`fixed top-0 right-0 h-screen w-96 bg-black backdrop-blur-xl border-l border-white/20 transform transition-transform duration-300 ease-in-out z-50 ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         
@@ -117,7 +117,7 @@ const GroupPartySlider: React.FC<GroupPartySliderProps> = ({ isOpen, onClose }) 
         </div>
 
         {/* Content */}
-        <div className="flex flex-col h-full bg-black">
+        <div className="flex flex-col h-[calc(100vh-80px)] bg-black">
           {/* Party Name Section */}
           <div className="p-4 border-b border-white/10 bg-black">
             <div className="flex items-center justify-between mb-2">
@@ -165,7 +165,7 @@ const GroupPartySlider: React.FC<GroupPartySliderProps> = ({ isOpen, onClose }) 
           </div>
 
           {/* Friends List */}
-          <div className="flex-1 p-4 overflow-y-auto min-h-[120px] bg-black">
+          <div className="flex-1 p-4 overflow-y-auto min-h-[120px] bg-black scrollbar-thin scrollbar-track-gray-900 scrollbar-thumb-gray-700 scrollbar-background-transparent">
             <h3 className="text-white font-semibold mb-2">Your Friends</h3>
             <div className="space-y-1">
               {friends.map(friend => (
