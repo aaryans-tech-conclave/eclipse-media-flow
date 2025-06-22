@@ -1,9 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Heart, Clock } from 'lucide-react';
+import { useLikedItems, LikedItem } from '../contexts/LikedItemsContext';
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { addToLikedItems, isLiked } = useLikedItems();
   
   const heroContent = [
     {
@@ -13,7 +14,7 @@ const HeroSection = () => {
       genre: "Action",
       duration: "3h 1min",
       rating: "8.4",
-      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1920&h=1080&fit=crop",
+      image: "https://image.tmdb.org/t/p/original/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
       year: "2019"
     },
     {
@@ -23,7 +24,7 @@ const HeroSection = () => {
       genre: "Sci-Fi",
       duration: "2h 49min",
       rating: "8.6",
-      image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?w=1920&h=1080&fit=crop",
+      image: "https://image.tmdb.org/t/p/original/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
       year: "2014"
     },
     {
@@ -33,7 +34,7 @@ const HeroSection = () => {
       genre: "Action",
       duration: "2h 16min",
       rating: "8.7",
-      image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?w=1920&h=1080&fit=crop",
+      image: "https://image.tmdb.org/t/p/original/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
       year: "1999"
     }
   ];
@@ -46,6 +47,14 @@ const HeroSection = () => {
   }, []);
 
   const currentContent = heroContent[currentSlide];
+
+  const handleMyListClick = () => {
+    const likedItem: LikedItem = {
+      ...currentContent,
+      type: 'movie'
+    };
+    addToLikedItems(likedItem);
+  };
 
   return (
     <div className="relative h-screen overflow-hidden">
@@ -91,8 +100,17 @@ const HeroSection = () => {
             <button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-pink-500/25">
               ▶ Watch Now
             </button>
-            <button className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-8 py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-300 flex items-center space-x-2">
-              <Heart className="w-5 h-5" />
+            <button 
+              onClick={handleMyListClick}
+              className={`backdrop-blur-sm border border-white/30 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 flex items-center space-x-2 ${
+                isLiked(currentContent.id) 
+                  ? 'bg-pink-500/80 hover:bg-pink-500' 
+                  : 'bg-white/20 hover:bg-white/30'
+              }`}
+            >
+              <Heart className={`w-5 h-5 ${
+                isLiked(currentContent.id) ? 'fill-white' : ''
+              }`} />
               <span>My List</span>
             </button>
           </div>

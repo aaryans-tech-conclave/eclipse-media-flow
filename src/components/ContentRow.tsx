@@ -1,26 +1,26 @@
-
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
+import { useLikedItems, LikedItem } from '../contexts/LikedItemsContext';
 
-//New
-interface Movie {
+interface ContentItem {
   id: number;
   title: string;
   image: string;
   genre: string;
   year: string;
   rating: string;
-  duration?: string;
+  duration: string;
 }
 
 interface ContentRowProps {
   title: string;
-  movies: Movie[];
+  movies: ContentItem[];
 }
 
 const ContentRow: React.FC<ContentRowProps> = ({ title, movies }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [hoveredMovie, setHoveredMovie] = useState<number | null>(null);
+  const { addToLikedItems, removeFromLikedItems, isLiked } = useLikedItems();
 
   const scroll = (direction: 'left' | 'right') => {
     const container = document.getElementById(`row-${title}`);
@@ -32,6 +32,19 @@ const ContentRow: React.FC<ContentRowProps> = ({ title, movies }) => {
       
       container.scrollTo({ left: newPosition, behavior: 'smooth' });
       setScrollPosition(newPosition);
+    }
+  };
+
+  const handleHeartClick = (movie: ContentItem) => {
+    const likedItem: LikedItem = {
+      ...movie,
+      type: 'movie' // Assuming all items in ContentRow are movies
+    };
+
+    if (isLiked(movie.id)) {
+      removeFromLikedItems(movie.id);
+    } else {
+      addToLikedItems(likedItem);
     }
   };
 
@@ -58,63 +71,68 @@ const ContentRow: React.FC<ContentRowProps> = ({ title, movies }) => {
       </button>
 
       {/* Movies Container */}
-      <div
+      <div 
         id={`row-${title}`}
-        className="flex space-x-4 overflow-x-auto scrollbar-hide px-6 md:px-16 pb-4"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="flex space-x-4 px-6 md:px-16 overflow-x-auto scrollbar-hide"
+        onScroll={(e) => setScrollPosition(e.currentTarget.scrollLeft)}
       >
         {movies.map((movie) => (
           <div
             key={movie.id}
-            className="flex-shrink-0 w-48 md:w-56 cursor-pointer group/card"
+            className="flex-shrink-0 w-64 group/item"
             onMouseEnter={() => setHoveredMovie(movie.id)}
             onMouseLeave={() => setHoveredMovie(null)}
           >
-            {/* Movie Card */}
-            <div className="relative rounded-lg overflow-hidden bg-gray-800 transition-all duration-300 group-hover/card:scale-105 group-hover/card:shadow-2xl group-hover/card:shadow-pink-500/20">
-              {/* Movie Image */}
-              <div className="aspect-[16/9] relative">
-                <img
-                  src={movie.image}
-                  alt={movie.title}
-                  className="w-full h-full object-cover"
-                />
-                
-                {/* Hover Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent transition-opacity duration-300 ${
-                  hoveredMovie === movie.id ? 'opacity-100' : 'opacity-0'
-                }`}>
-                  {/* Quick Actions */}
-                  <div className="absolute top-3 right-3">
-                    <button className="p-2 bg-black/50 hover:bg-black/70 rounded-full transition-colors">
-                      <Heart className="w-4 h-4 text-white" />
-                    </button>
-                  </div>
+            <div className="relative rounded-lg overflow-hidden bg-gray-800">
+              <img
+                src={movie.image}
+                alt={movie.title}
+                className="w-full h-36 object-cover transition-transform duration-300 group-hover/item:scale-105"
+              />
+              
+              {/* Overlay with gradient and actions */}
+              <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent transition-opacity duration-300 ${
+                hoveredMovie === movie.id ? 'opacity-100' : 'opacity-0'
+              }`}>
+                {/* Quick Actions */}
+                <div className="absolute top-3 right-3">
+                  <button 
+                    onClick={() => handleHeartClick(movie)}
+                    className={`p-2 rounded-full transition-colors ${
+                      isLiked(movie.id) 
+                        ? 'bg-pink-500/80 hover:bg-pink-500' 
+                        : 'bg-black/50 hover:bg-black/70'
+                    }`}
+                  >
+                    <Heart className={`w-4 h-4 ${
+                      isLiked(movie.id) ? 'text-white fill-white' : 'text-white'
+                    }`} />
+                  </button>
+                </div>
 
-                  {/* Movie Info */}
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <div className="flex items-center space-x-2 text-xs mb-2">
-                      <span className="bg-pink-500 px-2 py-1 rounded text-white font-medium">
-                        {movie.genre}
-                      </span>
-                      <span className="text-gray-300">{movie.year}</span>
-                      <span className="bg-yellow-500 text-black px-1 py-0.5 rounded text-xs font-bold">
-                        ★ {movie.rating}
-                      </span>
-                    </div>
+                {/* Movie Info */}
+                <div className="absolute bottom-3 left-3 right-3">
+                  <div className="flex items-center space-x-2 text-xs mb-2">
+                    <span className="bg-pink-500 px-2 py-1 rounded text-white font-medium">
+                      {movie.genre}
+                    </span>
+                    <span className="text-gray-300">{movie.year}</span>
+                    <span className="bg-yellow-500 text-black px-1 py-0.5 rounded text-xs font-bold">
+                      ★ {movie.rating}
+                    </span>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Movie Title */}
-              <div className="p-3">
-                <h3 className="text-white font-semibold text-sm mb-1 line-clamp-2">
-                  {movie.title}
-                </h3>
-                <div className="flex items-center justify-between text-xs text-gray-400">
-                  <span>{movie.year}</span>
-                  {movie.duration && <span>{movie.duration}</span>}
-                </div>
+            {/* Movie Title */}
+            <div className="p-3">
+              <h3 className="text-white font-semibold text-sm mb-1 line-clamp-2">
+                {movie.title}
+              </h3>
+              <div className="flex items-center justify-between text-xs text-gray-400">
+                <span>{movie.year}</span>
+                {movie.duration && <span>{movie.duration}</span>}
               </div>
             </div>
           </div>

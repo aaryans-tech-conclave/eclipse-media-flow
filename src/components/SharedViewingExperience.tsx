@@ -171,6 +171,17 @@ const SharedViewingExperience: React.FC<SharedViewingExperienceProps> = ({
             onReady: (event: any) => {
               setIsPlayerReady(true);
               console.log('YouTube player ready');
+              
+              // Get the video duration when player is ready
+              try {
+                const videoDuration = playerInstanceRef.current.getDuration();
+                if (videoDuration > 0) {
+                  setDuration(videoDuration);
+                  console.log('Video duration set to:', videoDuration);
+                }
+              } catch (error) {
+                console.error('Error getting video duration:', error);
+              }
             },
             onStateChange: (event: any) => {
               // YouTube player states: -1 (unstarted), 0 (ended), 1 (playing), 2 (paused), 3 (buffering), 5 (video cued)
@@ -207,23 +218,42 @@ const SharedViewingExperience: React.FC<SharedViewingExperienceProps> = ({
   const startTimeTracking = () => {
     if (timeUpdateIntervalRef.current) return;
     
+    console.log('Starting time tracking');
+    
+    // Ensure we have the duration when starting to track
+    if (playerInstanceRef.current && isPlayerReady && duration <= 0) {
+      try {
+        const videoDuration = playerInstanceRef.current.getDuration();
+        if (videoDuration > 0) {
+          setDuration(videoDuration);
+          console.log('Duration retrieved during tracking:', videoDuration);
+        }
+      } catch (error) {
+        console.error('Error getting duration during tracking:', error);
+      }
+    }
+    
     timeUpdateIntervalRef.current = setInterval(() => {
       if (playerInstanceRef.current && isPlayerReady) {
         try {
           const currentTime = playerInstanceRef.current.getCurrentTime();
-          const duration = playerInstanceRef.current.getDuration();
+          const currentDuration = playerInstanceRef.current.getDuration();
           
           // Only update if we have valid values
-          if (currentTime >= 0 && duration > 0) {
+          if (currentTime >= 0 && currentDuration > 0) {
             setCurrentTime(currentTime);
-            setDuration(duration);
-            console.log('Current time:', currentTime.toFixed(1), 'Duration:', duration.toFixed(1));
+            setDuration(currentDuration);
+            console.log('Current time:', currentTime.toFixed(1), 'Duration:', currentDuration.toFixed(1));
           }
         } catch (error) {
-          console.log('Error getting video time:', error);
+          console.error('Error getting video time:', error);
+          // Stop tracking if there's an error
+          stopTimeTracking();
         }
+      } else {
+        console.log('Player not ready or not available');
       }
-    }, 50); // Update every 50ms for smoother tracking
+    }, 100); // Increased to 100ms for better performance
   };
 
   const stopTimeTracking = () => {
@@ -266,21 +296,36 @@ const SharedViewingExperience: React.FC<SharedViewingExperienceProps> = ({
     const seekTime = parseFloat(e.target.value);
     setCurrentTime(seekTime);
     if (playerInstanceRef.current && isPlayerReady) {
+      try {
       playerInstanceRef.current.seekTo(seekTime, true);
+        console.log('Seeking to:', seekTime);
+      } catch (error) {
+        console.error('Error seeking:', error);
+      }
     }
   };
 
   const handleSeekStart = () => {
     setIsSeeking(true);
     if (playerInstanceRef.current && isPlayerReady) {
+      try {
       playerInstanceRef.current.pauseVideo();
+        console.log('Paused for seeking');
+      } catch (error) {
+        console.error('Error pausing for seek:', error);
+      }
     }
   };
 
   const handleSeekEnd = () => {
     setIsSeeking(false);
     if (playerInstanceRef.current && isPlayerReady && isPlaying) {
+      try {
       playerInstanceRef.current.playVideo();
+        console.log('Resumed after seeking');
+      } catch (error) {
+        console.error('Error resuming after seek:', error);
+      }
     }
   };
 
@@ -567,7 +612,7 @@ const SharedViewingExperience: React.FC<SharedViewingExperienceProps> = ({
                   <input
                     type="range"
                     min="0"
-                    max={duration || 100}
+                    max={duration > 0 ? duration : 100}
                     value={currentTime}
                     onChange={handleSeek}
                     onMouseDown={handleSeekStart}
@@ -576,7 +621,7 @@ const SharedViewingExperience: React.FC<SharedViewingExperienceProps> = ({
                     onTouchEnd={handleSeekEnd}
                     className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
                     style={{
-                      background: `linear-gradient(to right, #8b5cf6 0%, #8b5cf6 ${(currentTime / (duration || 1)) * 100}%, rgba(255, 255, 255, 0.2) ${(currentTime / (duration || 1)) * 100}%, rgba(255, 255, 255, 0.2) 100%)`
+                      background: `linear-gradient(to right, #8b5cf6 0%, #8b5cf6 ${duration > 0 ? (currentTime / duration) * 100 : 0}%, rgba(255, 255, 255, 0.2) ${duration > 0 ? (currentTime / duration) * 100 : 0}%, rgba(255, 255, 255, 0.2) 100%)`
                     }}
                   />
                 </div>
@@ -644,125 +689,125 @@ const SharedViewingExperience: React.FC<SharedViewingExperienceProps> = ({
               ))}
 
               {/* Poll Modal Overlay */}
-              {showPoll && activePoll !== null && (
+      {showPoll && activePoll !== null && (
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-center p-4">
                   <div className="bg-black/95 border border-white/20 rounded-xl shadow-2xl p-6 max-w-4xl w-full mb-20 relative">
                     <div className="text-center mb-4">
-                      <h2 className="text-xl font-bold mb-1 text-white">Quiz Time!</h2>
-                      <div className="w-12 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 mx-auto rounded-full"></div>
-                    </div>
-                    
+              <h2 className="text-xl font-bold mb-1 text-white">Quiz Time!</h2>
+              <div className="w-12 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 mx-auto rounded-full"></div>
+            </div>
+            
                     <div className="mb-3 text-white font-semibold text-base leading-relaxed">
-                      {pollQuestions.find(q => q.id === activePoll)?.question}
-                    </div>
-                    
+              {pollQuestions.find(q => q.id === activePoll)?.question}
+            </div>
+            
                     <div className="mb-4 text-center">
-                      <div className="inline-flex items-center space-x-2 bg-purple-500/20 border border-purple-500/40 rounded-full px-3 py-1">
-                        <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                        <span className="text-purple-300 text-sm font-semibold">Time left: {pollTimer}s</span>
-                      </div>
-                    </div>
-                    
+              <div className="inline-flex items-center space-x-2 bg-purple-500/20 border border-purple-500/40 rounded-full px-3 py-1">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <span className="text-purple-300 text-sm font-semibold">Time left: {pollTimer}s</span>
+              </div>
+            </div>
+            
                     <div className="space-y-3">
-                      {pollQuestions.find(q => q.id === activePoll)?.options.map((opt, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handlePollAnswer(activePoll, idx)}
-                          disabled={userAnswers[activePoll] !== undefined}
+              {pollQuestions.find(q => q.id === activePoll)?.options.map((opt, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handlePollAnswer(activePoll, idx)}
+                  disabled={userAnswers[activePoll] !== undefined}
                           className={`w-full text-left px-4 py-3 rounded-lg border transition-all duration-200 group relative overflow-hidden
-                            ${userAnswers[activePoll] === idx 
-                              ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-green-400/60 text-green-300' 
-                              : 'bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-purple-500/40'
-                            }
-                          `}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
+                    ${userAnswers[activePoll] === idx 
+                      ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-green-400/60 text-green-300' 
+                      : 'bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-purple-500/40'
+                    }
+                  `}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
                               <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-semibold
-                                ${userAnswers[activePoll] === idx 
-                                  ? 'bg-green-500 border-green-400 text-white' 
-                                  : 'border-white/30 text-white/70 group-hover:border-purple-400'
-                                }
-                              `}>
-                                {String.fromCharCode(65 + idx)}
-                              </div>
-                              <span className="font-medium text-sm">{opt}</span>
-                            </div>
-                            {userAnswers[activePoll] === idx && (
-                              <div className="flex items-center space-x-2">
-                                <span className="inline-flex items-center px-2 py-0.5 bg-purple-500 text-white text-xs font-semibold rounded-full">
-                                  Good guess!
-                                </span>
-                                <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                                  <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                  </svg>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                          
-                          {/* Hover effect */}
-                          {userAnswers[activePoll] === undefined && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                    
-                    <div className="mt-5 text-center">
-                      <div className="inline-flex items-center space-x-2 bg-white/5 border border-white/20 rounded-full px-3 py-1">
-                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                        <span className="text-gray-400 text-sm">Waiting for others... (Demo: only you)</span>
+                        ${userAnswers[activePoll] === idx 
+                          ? 'bg-green-500 border-green-400 text-white' 
+                          : 'border-white/30 text-white/70 group-hover:border-purple-400'
+                        }
+                      `}>
+                        {String.fromCharCode(65 + idx)}
                       </div>
+                      <span className="font-medium text-sm">{opt}</span>
                     </div>
+                    {userAnswers[activePoll] === idx && (
+                      <div className="flex items-center space-x-2">
+                        <span className="inline-flex items-center px-2 py-0.5 bg-purple-500 text-white text-xs font-semibold rounded-full">
+                          Good guess!
+                        </span>
+                        <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                          <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
+                  
+                  {/* Hover effect */}
+                  {userAnswers[activePoll] === undefined && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                  )}
+                </button>
+              ))}
+            </div>
+            
+                    <div className="mt-5 text-center">
+              <div className="inline-flex items-center space-x-2 bg-white/5 border border-white/20 rounded-full px-3 py-1">
+                <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                <span className="text-gray-400 text-sm">Waiting for others... (Demo: only you)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
               {/* Leaderboard Modal Overlay */}
-              {showLeaderboard && (
+      {showLeaderboard && (
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-center p-4">
                   <div className="bg-black/95 border border-white/20 rounded-xl shadow-2xl p-6 max-w-md w-full mb-20 relative">
-                    <div className="text-center mb-6">
-                      <h2 className="text-2xl font-bold mb-2 text-white">Leaderboard</h2>
-                      <div className="w-16 h-1 bg-gradient-to-r from-pink-500 to-purple-600 mx-auto rounded-full"></div>
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold mb-2 text-white">Leaderboard</h2>
+              <div className="w-16 h-1 bg-gradient-to-r from-pink-500 to-purple-600 mx-auto rounded-full"></div>
+            </div>
+            
+            <div className="space-y-3">
+              {leaderboard.map((entry, idx) => (
+                <div key={idx} className="flex items-center justify-between px-4 py-3 bg-white/5 border border-white/20 rounded-lg hover:bg-white/10 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
+                      ${idx === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-yellow-900' :
+                        idx === 1 ? 'bg-gradient-to-r from-gray-300 to-gray-500 text-gray-900' :
+                        idx === 2 ? 'bg-gradient-to-r from-amber-600 to-amber-800 text-white' :
+                        'bg-gradient-to-r from-purple-500 to-purple-700 text-white'
+                      }
+                    `}>
+                      {idx + 1}
                     </div>
-                    
-                    <div className="space-y-3">
-                      {leaderboard.map((entry, idx) => (
-                        <div key={idx} className="flex items-center justify-between px-4 py-3 bg-white/5 border border-white/20 rounded-lg hover:bg-white/10 transition-colors">
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
-                              ${idx === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-yellow-900' :
-                                idx === 1 ? 'bg-gradient-to-r from-gray-300 to-gray-500 text-gray-900' :
-                                idx === 2 ? 'bg-gradient-to-r from-amber-600 to-amber-800 text-white' :
-                                'bg-gradient-to-r from-purple-500 to-purple-700 text-white'
-                              }
-                            `}>
-                              {idx + 1}
-                            </div>
-                            <span className="font-semibold text-white">{entry.name}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-purple-400 font-bold text-lg">{entry.score}</span>
-                            <span className="text-gray-400 text-sm">/ {pollQuestions.length}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    <div className="mt-6 text-center">
-                      <button 
-                        onClick={() => setShowLeaderboard(false)} 
-                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-                      >
-                        Close
-                      </button>
-                    </div>
+                    <span className="font-semibold text-white">{entry.name}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-purple-400 font-bold text-lg">{entry.score}</span>
+                    <span className="text-gray-400 text-sm">/ {pollQuestions.length}</span>
                   </div>
                 </div>
-              )}
+              ))}
+            </div>
+            
+            <div className="mt-6 text-center">
+              <button 
+                onClick={() => setShowLeaderboard(false)} 
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
             </div>
           </div>
 
