@@ -1,0 +1,101 @@
+movie_id,title,release_year,release_month,runtime,country,language,mpaa_rating,primary_genre,secondary_genre,theme,tags_str
+mv00001,The Dark Knight,2008,7,152,USA,English,PG-13,Action,Drama,Justice,Cult Classic;Oscar Winner;Netflix;Based on Book;Amazon Prime;Graphic Violence
+mv00002,Mad Max: Fury Road,2015,5,120,Australia,English,R,Action,SciFi,Survival,Cult Classic;Festival Favorite;Oscar Winner;Amazon Prime;Graphic Violence
+mv00003,John Wick,2014,10,101,USA,English,R,Action,Thriller,Revenge,Cult Classic;Netflix;Amazon Prime;Graphic Violence
+mv00004,The Grand Budapest Hotel,2014,3,99,USA,English,R,Comedy,Drama,Coming of Age,Independent Film;Festival Favorite;Oscar Winner;Amazon Prime;Hulu
+mv00005,Superbad,2007,8,113,USA,English,R,Comedy,Drama,Coming of Age,Cult Classic;Netflix;Amazon Prime;Strong Romance
+mv00006,The Shawshank Redemption,1994,9,142,USA,English,R,Drama,Thriller,Redemption,Cult Classic;Based on Book;Amazon Prime
+mv00007,Parasite,2019,10,132,USA,Multilingual,R,Drama,Thriller,Betrayal,Independent Film;Festival Favorite;Oscar Winner;Amazon Prime;Hulu
+mv00008,12 Years a Slave,2013,10,134,USA,English,R,Drama,Documentary,Survival,Historical;Oscar Winner;Based on Book;Amazon Prime;Biographical;Sequel
+mv00009,Get Out,2017,2,104,USA,English,R,Horror,Thriller,Survival,Cult Classic;Amazon Prime;Graphic Violence;Oscar Winner
+mv00010,The Conjuring,2013,7,112,USA,English,R,Horror,Thriller,Survival,Based on Book;Amazon Prime;HBO Max;Graphic Violence
+mv00011,Halloween,1978,10,91,USA,English,R,Horror,Thriller,Survival,Cult Classic;Halloween;Amazon Prime;Peacock;Graphic Violence
+mv00012,Inception,2010,7,148,USA,English,PG-13,SciFi,Action,Redemption,Cult Classic;Amazon Prime;HBO Max;Oscar Winner
+mv00013,Blade Runner 2049,2017,10,164,USA,English,R,SciFi,Drama,Coming of Age,Festival Favorite;Amazon Prime;Sequel;Oscar Winner
+mv00014,The Matrix,1999,3,136,USA,English,R,SciFi,Action,Heroism,Cult Classic;Amazon Prime;HBO Max;Oscar Winner
+mv00015,La La Land,2016,12,128,USA,English,PG-13,Romance,Drama,Love,Oscar Winner;Netflix;Amazon Prime;Valentine;Strong Romance
+mv00016,The Notebook,2004,6,123,USA,English,PG-13,Romance,Drama,Love,Based on Book;Netflix;Amazon Prime;Valentine;Strong Romance
+mv00017,Eternal Sunshine of the Spotless Mind,2004,3,108,USA,English,R,Romance,SciFi,Love,Cult Classic;Amazon Prime;Strong Romance;Independent Film
+mv00018,Free Solo,2018,9,100,USA,English,PG-13,Documentary,Drama,Heroism,Festival Favorite;Disney+;Amazon Prime;Oscar Winner
+mv00019,March of the Penguins,2005,6,80,USA,English,G,Documentary,Drama,Survival,Family Friendly;Disney+;Amazon Prime;Oscar Winner
+mv00020,Spider-Man: Into the Spider-Verse,2018,12,117,USA,English,PG,Animation,Action,Heroism,Family Friendly;Oscar Winner;Based on Book;Netflix;Amazon Prime
+mv00021,Coco,2017,11,105,USA,English,PG,Animation,Fantasy,Coming of Age,Family Friendly;Disney+;Amazon Prime;Oscar Winner
+mv00022,Toy Story 4,2019,6,100,USA,English,G,Animation,Comedy,Coming of Age,Family Friendly;Disney+;Amazon Prime;Oscar Winner
+mv00023,Gone Girl,2014,10,149,USA,English,R,Thriller,Drama,Betrayal,Cult Classic;Based on Book;Amazon Prime;Hulu
+mv00024,Zodiac,2007,3,157,USA,English,R,Thriller,Drama,Justice,Cult Classic;Based on Book;Amazon Prime
+mv00025,Pan's Labyrinth,2006,12,118,USA,Spanish,R,Fantasy,Drama,Coming of Age,HBO Max;Independent Film;Festival Favorite;Oscar Winner;Amazon Prime
+mv00026,The Shape of Water,2017,12,123,USA,English,R,Fantasy,Romance,Love,Festival Favorite;Oscar Winner;Amazon Prime;Strong Romance;Hulu
+mv00027,Home Alone,1990,11,103,USA,English,PG,Comedy,Fantasy,Coming of Age,Cult Classic;Family Friendly;Christmas;Disney+;Amazon Prime
+mv00028,Die Hard,1988,7,132,USA,English,R,Action,Thriller,Heroism,Cult Classic;Christmas;Amazon Prime;Hulu;Graphic Violence
+mv00029,Love Actually,2003,11,135,UK,English,R,Romance,Comedy,Love,Christmas;Netflix;Amazon Prime;Valentine;Strong Romance
+mv00030,The Nightmare Before Christmas,1993,10,76,USA,English,PG,Animation,Fantasy,Coming of Age,Cult Classic;Family Friendly;Christmas;Halloween;Disney+;Amazon Prime
+mv00031,Dangal,2016,12,161,India,Hindi,PG,Drama,Documentary,Heroism,Family Friendly;Based on Book;Netflix;Bollywood;Amazon Prime;Biographical
+mv00032,3 Idiots,2009,12,170,India,Hindi,PG-13,Comedy,Drama,Coming of Age,Cult Classic;Bollywood;Based on Book;Amazon Prime
+mv00033,Baahubali: The Beginning,2015,7,159,India,Multilingual,PG-13,Action,Fantasy,Heroism,Festival Favorite;Netflix;Amazon Prime;Regional Cinema
+mv00034,Amélie,2001,4,122,USA,French,R,Romance,Comedy,Love,Cult Classic;Amazon Prime;Strong Romance;Independent Film
+mv00035,City of God,2002,8,130,Brazil,Multilingual,R,Drama,Thriller,Survival,HBO Max;Independent Film;Festival Favorite;Based on Book;Amazon Prime
+mv00036,Spirited Away,2001,7,125,Japan,Japanese,PG,Animation,Fantasy,Coming of Age,Cult Classic;Anime;HBO Max;Family Friendly;Oscar Winner;Amazon Prime
+mv00037,Black Panther,2018,2,134,USA,English,PG-13,Action,SciFi,Heroism,Based on Book;Disney+;Amazon Prime;Oscar Winner
+mv00038,Knives Out,2019,11,130,USA,English,PG-13,Thriller,Comedy,Justice,Cult Classic;Netflix;Amazon Prime
+mv00039,Joker,2019,10,122,USA,English,R,Drama,Thriller,Betrayal,HBO Max;Oscar Winner;Based on Book;Amazon Prime;Graphic Violence
+mv00040,1917,2019,12,119,UK,English,R,Drama,Action,Survival,Amazon Prime;Historical;Oscar Winner
+mv00041,Moonlight,2016,10,111,USA,English,R,Drama,Romance,Coming of Age,Independent Film;Oscar Winner;Netflix;Amazon Prime;Strong Romance
+mv00042,Whiplash,2014,10,107,USA,English,R,Drama,Thriller,Coming of Age,Independent Film;Amazon Prime;Oscar Winner
+mv00043,The Social Network,2010,10,120,USA,English,PG-13,Drama,Documentary,Betrayal,Oscar Winner;Based on Book;Netflix;Amazon Prime;Biographical
+mv00044,Avengers: Endgame,2019,4,181,USA,English,PG-13,Action,SciFi,Heroism,Based on Book;Disney+;Amazon Prime
+mv00045,The Lion King,2019,7,118,USA,English,PG,Animation,Drama,Coming of Age,Family Friendly;Remake;Amazon Prime;Disney+
+mv00046,Frozen II,2019,11,103,USA,English,PG,Animation,Fantasy,Coming of Age,Family Friendly;Oscar Winner;Disney+;Amazon Prime;Sequel
+mv00047,A Quiet Place,2018,4,90,USA,English,PG-13,Horror,Thriller,Survival,Cult Classic;Amazon Prime;Peacock
+mv00048,Hereditary,2018,6,127,USA,English,R,Horror,Drama,Betrayal,Festival Favorite;Amazon Prime;Graphic Violence;Independent Film
+mv00049,Us,2019,3,116,USA,English,R,Horror,Thriller,Survival,Cult Classic;Amazon Prime;Graphic Violence
+mv00050,Midsommar,2019,7,148,USA,English,R,Horror,Drama,Betrayal,Festival Favorite;Amazon Prime;Graphic Violence;Independent Film
+mv00051,Call Me By Your Name,2017,11,132,USA,English,R,Romance,Drama,Love,Oscar Winner;Based on Book;Amazon Prime;Strong Romance;Hulu
+mv00052,Little Women,2019,12,135,USA,English,PG,Drama,Romance,Coming of Age,Family Friendly;Oscar Winner;Based on Book;Netflix;Amazon Prime;Strong Romance
+mv00053,The Irishman,2019,11,209,USA,English,R,Drama,Thriller,Redemption,Based on Book;Netflix;Amazon Prime;Oscar Winner
+mv00054,Once Upon a Time in Hollywood,2019,7,161,USA,English,R,Drama,Comedy,Coming of Age,Cult Classic;Netflix;Amazon Prime;Oscar Winner
+mv00055,Marriage Story,2019,12,137,USA,English,R,Drama,Romance,Love,Netflix;Amazon Prime;Strong Romance;Oscar Winner
+mv00056,Ford v Ferrari,2019,11,152,USA,English,PG-13,Drama,Action,Heroism,Oscar Winner;Based on Book;Disney+;Amazon Prime;Biographical
+mv00057,Jojo Rabbit,2019,10,108,USA,English,PG-13,Comedy,Drama,Coming of Age,Disney+;Amazon Prime;Historical;Oscar Winner
+mv00058,The Lighthouse,2019,10,110,USA,English,R,Horror,Drama,Betrayal,Festival Favorite;Amazon Prime;Graphic Violence;Independent Film
+mv00059,Uncut Gems,2019,12,135,USA,English,R,Thriller,Drama,Survival,Festival Favorite;Netflix;Amazon Prime;Independent Film
+mv00060,The Farewell,2019,7,100,USA,English,PG,Drama,Comedy,Love,Independent Film;Festival Favorite;Family Friendly;Amazon Prime;Strong Romance
+mv00061,Booksmart,2019,5,102,USA,English,R,Comedy,Drama,Coming of Age,Amazon Prime;Hulu;Independent Film
+mv00062,Klaus,2019,11,96,USA,English,PG,Animation,Comedy,Redemption,Family Friendly;Christmas;Oscar Winner;Netflix;Amazon Prime
+mv00063,The Two Popes,2019,12,125,UK,English,PG-13,Drama,Documentary,Redemption,Oscar Winner;Netflix;Amazon Prime;Biographical;Sequel
+mv00064,Dolemite Is My Name,2019,10,118,USA,English,R,Comedy,Drama,Coming of Age,Netflix;Amazon Prime;Biographical
+mv00065,The King,2019,10,140,UK,English,R,Drama,Action,Heroism,Based on Book;Netflix;Amazon Prime;Historical
+mv00066,Hustlers,2019,9,110,USA,English,R,Drama,Thriller,Survival,Based on Book;Amazon Prime;Hulu
+mv00067,Shazam!,2019,4,132,USA,English,PG-13,Action,Comedy,Heroism,Based on Book;Amazon Prime;HBO Max
+mv00068,Captain Marvel,2019,3,124,USA,English,PG-13,Action,SciFi,Heroism,Based on Book;Disney+;Amazon Prime
+mv00069,Glass,2019,1,129,USA,English,PG-13,Thriller,SciFi,Heroism,Amazon Prime;HBO Max
+mv00070,Alita: Battle Angel,2019,2,122,USA,English,PG-13,SciFi,Action,Coming of Age,Based on Book;Disney+;Amazon Prime
+mv00071,Godzilla: King of the Monsters,2019,5,132,USA,English,PG-13,Action,SciFi,Survival,Amazon Prime;HBO Max
+mv00072,Aladdin,2019,5,128,USA,English,PG,Fantasy,Romance,Love,Family Friendly;Remake;Amazon Prime;Strong Romance;Disney+
+mv00073,Dumbo,2019,3,112,USA,English,PG,Fantasy,Drama,Coming of Age,Family Friendly;Remake;Amazon Prime;Disney+
+mv00074,Pet Sematary,2019,4,101,USA,English,R,Horror,Thriller,Survival,Based on Book;Remake;Amazon Prime;Graphic Violence
+mv00075,It Chapter Two,2019,9,169,USA,English,R,Horror,Drama,Coming of Age,HBO Max;Sequel;Based on Book;Amazon Prime;Graphic Violence
+mv00076,Doctor Sleep,2019,11,152,USA,English,R,Horror,Thriller,Redemption,Based on Book;Amazon Prime;HBO Max;Graphic Violence
+mv00077,Zombieland: Double Tap,2019,10,99,USA,English,R,Comedy,Horror,Survival,Netflix;Amazon Prime;Sequel
+mv00078,Brightburn,2019,5,90,USA,English,R,Horror,SciFi,Betrayal,Amazon Prime;Graphic Violence
+mv00079,Rocketman,2019,5,121,UK,English,R,Drama,Documentary,Coming of Age,Amazon Prime;Biographical;Oscar Winner
+mv00080,Yesterday,2019,6,116,UK,English,PG-13,Comedy,Romance,Love,Amazon Prime;Strong Romance
+mv00081,The Dead Don't Die,2019,6,104,USA,English,R,Comedy,Horror,Survival,Amazon Prime;Hulu;Independent Film
+mv00082,Child's Play,2019,6,90,USA,English,R,Horror,Thriller,Survival,Remake;Amazon Prime;Graphic Violence
+mv00083,Everything Everywhere All at Once,2022,3,139,USA,English,R,SciFi,Comedy,Love,Cult Classic;Independent Film;Oscar Winner;Amazon Prime;Strong Romance
+mv00084,Nomadland,2020,9,107,USA,English,R,Drama,Documentary,Survival,Independent Film;Amazon Prime;Hulu;Oscar Winner
+mv00085,CODA,2021,8,111,USA,English,PG-13,Drama,Comedy,Coming of Age,Apple TV+;Amazon Prime;Oscar Winner
+mv00086,Oppenheimer,2023,7,180,USA,English,R,Drama,Documentary,Heroism,Amazon Prime;Historical;Biographical;Oscar Winner
+mv00087,TÁR,2022,10,158,USA,English,R,Drama,Thriller,Betrayal,Festival Favorite;Amazon Prime;Independent Film
+mv00088,Top Gun: Maverick,2022,5,131,USA,English,PG-13,Action,Drama,Heroism,Amazon Prime
+mv00089,Avatar: The Way of Water,2022,12,192,USA,English,PG-13,SciFi,Fantasy,Survival,Disney+;Amazon Prime
+mv00090,The Batman,2022,3,176,USA,English,PG-13,Action,Thriller,Justice,Based on Book;Amazon Prime;HBO Max
+mv00091,Dune,2021,10,155,USA,English,PG-13,SciFi,Action,Heroism,Based on Book;Amazon Prime;HBO Max;Oscar Winner
+mv00092,No Time to Die,2021,10,163,UK,English,PG-13,Action,Thriller,Heroism,Amazon Prime
+mv00093,West Side Story,2021,12,156,USA,English,PG-13,Romance,Drama,Love,Oscar Winner;Remake;Amazon Prime;Strong Romance;Disney+
+mv00094,The Power of the Dog,2021,11,126,USA,English,R,Drama,Thriller,Betrayal,Based on Book;Netflix;Amazon Prime;Oscar Winner
+mv00095,Minari,2020,2,115,USA,English,PG-13,Drama,Documentary,Coming of Age,Festival Favorite;Independent Film;Amazon Prime;Oscar Winner
+mv00096,Sound of Metal,2020,11,120,USA,English,R,Drama,Documentary,Coming of Age,Independent Film;Amazon Prime;Oscar Winner
+mv00097,The Father,2020,12,97,UK,English,PG-13,Drama,Thriller,Love,Oscar Winner;Based on Book;Netflix;Amazon Prime;Strong Romance
+mv00098,Judas and the Black Messiah,2021,2,126,USA,English,R,Drama,Documentary,Betrayal,HBO Max;Historical;Oscar Winner;Amazon Prime;Biographical
+mv00099,Promising Young Woman,2020,12,113,USA,English,R,Thriller,Drama,Justice,Amazon Prime;Oscar Winner
+mv00100,Soul,2020,12,100,USA,English,PG,Animation,Fantasy,Coming of Age,Family Friendly;Disney+;Amazon Prime;Oscar Winner
