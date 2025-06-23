@@ -33,27 +33,27 @@ Base Movie Attributes are attributes linked to the movie characteristic of the m
 
 ## Tag Categories
 
-### 🏆 **Award Tags**
+### **Award Tags**
 - `Oscar Winner`, `Festival Favorite`
 - **Usage:** Quality indicators and prestige-based recommendations
 
-### 🎬 **Content Tags** 
+### **Content Tags** 
 - `Family Friendly`, `Graphic Violence`, `Strong Romance`
 - **Usage:** Content filtering, parental controls, sensitivity warnings
 
-### 🎭 **Production Tags**
+### **Production Tags**
 - `Sequel`, `Remake`, `Based on Book`, `Independent Film`, `Biographical`, `Historical`
 - **Usage:** Production type preferences and originality filtering
 
-### 🌍 **Cultural Tags**
+### **Cultural Tags**
 - `Bollywood`, `Tollywood`, `Regional Cinema`, `Anime`, `J-Drama`, `Samurai`
 - **Usage:** Cultural content discovery and regional preferences
 
-### 🎄 **Seasonal Tags**
+### **Seasonal Tags**
 - `Christmas`, `Halloween`, `Valentine`, `Easter`, `Thanksgiving`, `Diwali`, `Holi`
 - **Usage:** Holiday recommendations and seasonal content curation
 
-### 📺 **Platform Tags**
+### **Platform Tags**
 - `Netflix`, `Amazon Prime`, `Disney+`, `HBO Max`, `Hulu`, `Apple TV+`, `Peacock`
 - **Usage:** Availability-based filtering and subscription-aware recommendations
 
