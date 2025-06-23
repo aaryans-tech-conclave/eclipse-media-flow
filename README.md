@@ -221,3 +221,202 @@ Base Movie Attributes are attributes linked to the movie characteristic of the m
 - **Users:** 50,000 profiles with 50+ behavioral attributes  
 - **Purpose:** Advanced recommendation system training and testing
 - **Applications:** Context-aware ML, trend prediction, personalization algorithms
+
+# Movie Recommendation System Features
+
+## Interaction Generation Features
+
+### **Affinity Calculation Components**
+| Feature | Type | Values | Description |
+|---------|------|--------|-------------|
+| `primary_genre_match` | `float` | `1.0` or `0.3` | Binary match between user genre preference and movie primary genre |
+| `secondary_genre_match` | `float` | `1.0` or `0.3` | Binary match between user genre preference and movie secondary genre |
+| `genre_affinity` | `float` | `0.3` - `1.0` | Weighted combination (70% primary + 30% secondary) genre matching |
+| `sentiment_alignment` | `float` | `0.0` - `1.0` | Absolute difference between user mood score and movie title sentiment |
+| `engagement_match` | `float` | `0.0` - `1.0` | Product of user and movie engagement scores |
+| `trend_match` | `float` | `0.0` - `1.0` | Product of user trend responsiveness and movie trending score |
+| `event_match` | `float` | `0.0` - `1.0` | Product of user event engagement and movie event relevance |
+| `rewatch_match` | `float` | `0.0` - `1.0` | Product of user rewatch ratio and movie rewatchability |
+
+### **Mood-Sentiment Mapping**
+| Mood | Sentiment Score | Usage |
+|------|----------------|--------|
+| `Happy` | `0.8` | Positive sentiment alignment for uplifting content |
+| `Sad` | `-0.8` | Negative sentiment for emotional/dramatic content |
+| `Stressed` | `-0.5` | Moderate negative for calming content preference |
+| `Relaxed` | `0.5` | Moderate positive for light entertainment |
+| `Excited` | `0.9` | High positive for energetic/action content |
+| `Bored` | `-0.6` | Negative for engaging/stimulating content |
+
+### **Final Affinity Formula**
+```python
+affinity = (0.30 * genre_affinity + 
+           0.20 * sentiment_alignment + 
+           0.10 * engagement_match + 
+           0.15 * trend_match + 
+           0.10 * event_match + 
+           0.15 * rewatch_match)
+```
+
+## Model Input Features
+
+### **User Features (35 attributes)**
+| Feature | Type | Range | Description |
+|---------|------|-------|-------------|
+| `age` | `int` | `18` - `70` | User demographic for age-based filtering |
+| `completion_rate` | `float` | `0.0` - `1.0` | Content completion behavior pattern |
+| `binge_score` | `float` | `0.0` - `1.0` | Binge-watching tendency indicator |
+| `rewatch_ratio` | `float` | `0.0` - `1.0` | Frequency of rewatching content |
+| `rating_frequency` | `float` | `0.0` - `1.0` | How often user rates watched content |
+| `autoplay_acceptance` | `float` | `0.0` - `1.0` | Acceptance of autoplay recommendations |
+| `search_usage` | `float` | `0.0` - `1.0` | Search vs discovery preference |
+| `content_diversity` | `float` | `0.0` - `1.0` | Genre diversity in viewing habits |
+| `subtitle_usage` | `float` | `0.0` - `1.0` | Subtitle usage frequency |
+| `peak_viewing_time` | `int` | `18` - `23` | Hour of peak viewing activity |
+| `weekend_ratio` | `float` | `0.0` - `1.0` | Weekend vs weekday viewing ratio |
+| `session_length_avg` | `float` | `20.0` - `120.0` | Average session duration (minutes) |
+| `time_since_last_watch` | `float` | `0.0` - `168.0` | Hours since last viewing session |
+| `daily_consistency` | `float` | `0.0` - `1.0` | Regularity of daily viewing |
+| `trend_affinity` | `float` | `0.0` - `1.0` | Interest in trending content |
+| `friend_influence` | `float` | `0.0` - `1.0` | Social recommendation susceptibility |
+| `social_engagement` | `float` | `0.0` - `1.0` | Social media activity level |
+| `group_watch_freq` | `float` | `0.0` - `1.0` | Co-viewing behavior frequency |
+| `weather_impact` | `float` | `1.0` - `1.6` | Weather influence on viewing |
+| `seasonal_content_pref` | `float` | `0.0` - `1.0` | Seasonal content preference |
+| `location_content_match` | `float` | `0.0` - `1.0` | Geographic content relevance |
+| `holiday_boost` | `float` | `0.0` - `1.0` | Holiday viewing behavior change |
+| `engagement_score` | `float` | `0.0` - `1.0` | Overall platform engagement |
+| `mood_genre_alignment` | `float` | `0.0` - `1.0` | Mood-genre preference matching |
+| `personalization_score` | `float` | `0.0` - `1.0` | Personalization effectiveness |
+| `contextual_fit` | `float` | `0.0` - `1.0` | Context-pattern matching |
+| `new_release_responsiveness` | `float` | `0.0` - `1.3` | New content adoption rate |
+| `documentary_affinity` | `float` | `0.0` - `1.0` | Documentary content preference |
+| `device_engagement` | `float` | `0.0` - `1.0` | Multi-device usage engagement |
+| `cultural_affinity` | `int` | `0`, `1` | Cultural content preference binary |
+| `event_interest` | `float` | `0.0` - `1.0` | Current event content interest |
+| `social_media_activity` | `float` | `0.0` - `1.0` | Social media engagement level |
+| `trend_responsiveness` | `float` | `0.0` - `1.0` | Response speed to trends |
+| `current_event_engagement` | `float` | `0.0` - `1.0` | Event-related content engagement |
+
+### **Movie Features (25+ attributes)**
+| Feature | Type | Range | Description |
+|---------|------|-------|-------------|
+| `runtime` | `int` | `76` - `209` | Movie duration in minutes |
+| `title_sentiment` | `float` | `-1.0` - `1.0` | TextBlob sentiment analysis of title |
+| `violence_level` | `float` | `0.0` - `1.0` | Violence content intensity |
+| `romance_level` | `float` | `0.0` - `1.0` | Romance content intensity |
+| `humor_level` | `float` | `0.0` - `1.0` | Comedy content intensity |
+| `complexity_score` | `float` | `0.0` - `1.0` | Narrative complexity rating |
+| `days_since_release` | `int` | `0` - `16000+` | Days elapsed since release |
+| `decay_factor` | `float` | `0.1` - `1.0` | Time-based relevance decay |
+| `is_new_release` | `int` | `0`, `1` | Recent release binary flag |
+| `holiday_boost` | `float` | `0.1` - `1.0` | Holiday relevance multiplier |
+| `avg_rating` | `float` | `1.0` - `10.0` | Average user rating |
+| `rating_count` | `int` | `0` - `500000+` | Number of user ratings |
+| `box_office` | `float` | `0.0` - `1000+` | Box office performance (millions) |
+| `rewatch_score` | `float` | `0.0` - `1.0` | Rewatchability factor |
+| `critical_acclaim` | `float` | `0.0` - `1.0` | Critics' reception score |
+| `award_nominations` | `int` | `0` - `50+` | Number of award nominations |
+| `mood_intensity` | `float` | `0.0` - `1.0` | Emotional impact rating |
+| `family_friendly` | `int` | `0`, `1` | Family-appropriate content flag |
+| `cultural_specificity` | `float` | `0.0` - `1.0` | Cultural relevance score |
+| `current_event_relevance` | `float` | `0.0` - `1.0` | Current event topic relevance |
+| `trending_score` | `float` | `0.0` - `1.0` | Social media trending factor |
+| `social_media_mentions` | `int` | `0` - `50000+` | Social media activity count |
+| `search_volume` | `int` | `0` - `100000+` | Search interest volume |
+| `viral_potential` | `float` | `0.0` - `1.0` | Viral content scoring |
+| `engagement_score` | `float` | `0.0` - `1.0` | Overall content engagement |
+| `rewatchability` | `float` | `0.0` - `1.0` | Composite rewatch likelihood |
+
+### **Holiday Features (Dynamic)**
+| Feature Pattern | Type | Range | Description |
+|----------------|------|-------|-------------|
+| `holiday_Christmas` | `float` | `0.0` - `0.8` | Christmas content relevance |
+| `holiday_Halloween` | `float` | `0.0` - `0.7` | Halloween content relevance |
+| `holiday_Diwali` | `float` | `0.0` - `0.9` | Diwali content relevance |
+| `holiday_Valentine` | `float` | `0.0` - `0.7` | Valentine's Day relevance |
+| `holiday_*` | `float` | `0.0` - `1.0` | Additional holiday-specific features |
+
+### **Categorical Features**
+| Feature | Type | Values | Description |
+|---------|------|--------|-------------|
+| `gender` | `string` | `Male`, `Female`, `Other` | User gender for demographic targeting |
+
+## Model Architecture
+
+### **Neural Network Structure**
+| Layer | Type | Units | Activation | Regularization |
+|-------|------|-------|------------|----------------|
+| Input | Dense | `num_features` | - | - |
+| Hidden 1 | Dense | `512` | `relu` | BatchNorm + Dropout(0.3) |
+| Hidden 2 | Dense | `256` | `relu` | BatchNorm + Dropout(0.2) |
+| Hidden 3 | Dense | `128` | `relu` | BatchNorm |
+| Output | Dense | `1` | `linear` | - |
+
+### **Training Configuration**
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| `optimizer` | `Adam(lr=0.001)` | Adaptive learning rate optimization |
+| `loss` | `mse` | Mean squared error for regression |
+| `metrics` | `mae` | Mean absolute error monitoring |
+| `batch_size` | `256` | Training batch size |
+| `epochs` | `50` | Maximum training epochs |
+| `early_stopping` | `patience=5` | Validation loss monitoring |
+| `validation_split` | `0.1` | Training data validation split |
+
+## Preprocessing Pipeline
+
+### **Feature Processing**
+| Feature Type | Method | Description |
+|--------------|--------|-------------|
+| Numerical | `StandardScaler()` | Z-score normalization for 60+ features |
+| Categorical | `OneHotEncoder()` | Binary encoding with unknown handling |
+| Pipeline | `ColumnTransformer` | Parallel feature preprocessing |
+
+### **Data Splits**
+| Split | Percentage | Usage |
+|-------|------------|-------|
+| Training | `70%` | Model parameter learning |
+| Validation | `10%` | Hyperparameter tuning |
+| Testing | `20%` | Final performance evaluation |
+
+## Recommendation Generation
+
+### **Recommendation Process**
+1. **User Selection:** Query single user from database
+2. **Movie Pairing:** Create user-movie combinations for all available movies
+3. **Feature Engineering:** Apply same preprocessing pipeline as training
+4. **Prediction:** Generate rating predictions for all movies
+5. **Ranking:** Sort by predicted rating and return top-N recommendations
+
+### **Output Format**
+| Field | Type | Description |
+|-------|------|-------------|
+| `movie_id` | `string` | Unique movie identifier |
+| `title` | `string` | Movie title for display |
+| `primary_genre` | `string` | Main genre category |
+| `release_year` | `int` | Release year |
+| `predicted_rating` | `float` | Model-predicted user rating |
+
+## Model Artifacts
+
+### **Saved Components**
+| File | Format | Contents |
+|------|--------|----------|
+| `movie_recommender_model.keras` | Keras | Trained neural network model |
+| `preprocessor.pkl` | Joblib | Feature preprocessing pipeline |
+| `feature_info.pkl` | Joblib | Feature names and categories |
+
+## Performance Metrics
+
+### **Evaluation**
+- **RMSE (Root Mean Square Error):** Primary regression metric
+- **Train/Test Split:** 80/20 for unbiased evaluation
+- **Validation Monitoring:** Early stopping on validation loss
+
+## System Summary
+- **Input Features:** 60+ engineered attributes (user + movie + categorical)
+- **Interactions:** 50,000 synthetic user-movie ratings
+- **Model Type:** Deep neural network with batch normalization
+- **Output:** Top-N personalized movie recommendations
+- **Applications:** Content discovery, personalization, engagement optimization
