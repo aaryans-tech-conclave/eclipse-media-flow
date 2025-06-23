@@ -6,6 +6,57 @@ npm i
 # Step 2: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
+# Snap-Shots of the working prototype!
+## Landing Page
+![image](https://github.com/user-attachments/assets/2a87bc48-1c64-4f6d-84cc-adda31c30cb9)
+
+## Favorites List
+![image](https://github.com/user-attachments/assets/39674eea-a567-420e-870d-257c950f7a08)
+![image](https://github.com/user-attachments/assets/ff411b4e-1ed4-485c-ba74-42eae49555e6)
+
+## Mood Detection
+![image](https://github.com/user-attachments/assets/e6ed9760-7f0f-4f6d-80aa-dd54a88ebbff)
+![image](https://github.com/user-attachments/assets/fc458161-079d-459e-a8c7-baf8a237f4ca)
+
+## Live Trends: Trending Movies and Shows
+![image](https://github.com/user-attachments/assets/944deb6b-1c86-4d76-851e-a0e39060c443)
+
+## Search and Play
+![image](https://github.com/user-attachments/assets/6927c0ac-9238-4c8e-9c38-2270e68cd969)
+
+## TV Shows Itinerary
+![image](https://github.com/user-attachments/assets/54ccc678-ef3a-41eb-96aa-1b318ce08647)
+
+## Movies Itinerary
+![image](https://github.com/user-attachments/assets/c1e6c6d8-fb98-418c-9164-aea8a37bd011)
+
+## Watch Party
+Watch Party Dialogue!
+
+![image](https://github.com/user-attachments/assets/3d8f8e28-db19-4e1d-9981-81b52231af60)
+
+Add Your Friends!
+
+![image](https://github.com/user-attachments/assets/227feefd-7d8d-4d7e-8e81-0af6bd97764e)
+
+Choose a movie and begin watching!
+
+![image](https://github.com/user-attachments/assets/b2e278b3-b1ed-4924-a1ba-ce2847ff2230)
+
+Solve Exciting Questions!
+
+![image](https://github.com/user-attachments/assets/74272043-a1b3-403e-b507-fe56af2783f0)
+
+Give answers and build your rank on the leaderboard!
+
+![image](https://github.com/user-attachments/assets/c5d9f30e-8d50-40c1-a3f9-fdba9b71ae32)
+
+Laughs and Gags! React with emoticons
+
+![image](https://github.com/user-attachments/assets/755c176c-0f7a-4176-80b8-1477aec37393)
+
+More coming soon, stay tuned!
+
 # Base Movie Attributes
 Base Movie Attributes are attributes linked to the movie characteristic of the movie (non-variable), the following lists them and their relevance.
 ## Core Features
@@ -420,3 +471,15 @@ affinity = (0.30 * genre_affinity +
 - **Model Type:** Deep neural network with batch normalization
 - **Output:** Top-N personalized movie recommendations
 - **Applications:** Content discovery, personalization, engagement optimization
+
+# Some Model Snippets
+
+## View Training Metadata
+Param Notes:
+![image](https://github.com/user-attachments/assets/9ad886ef-f107-4ff1-a5a9-63ec96e2ffe1)
+Epoch Queues:
+![image](https://github.com/user-attachments/assets/2b1be399-ea6d-46dc-9008-ea5a84c9965d)
+
+## User Specific Interactions
+![image](https://github.com/user-attachments/assets/84d70eb9-fa37-40a2-b600-c3a1abb1536f)
+Observe our model creates a predictive score based on previous movie interactions, movies metadata and user metadata to provide a score which ranks movies (top 20 in this case) for reccomendations!
